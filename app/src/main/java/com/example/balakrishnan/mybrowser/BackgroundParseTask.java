@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static com.example.balakrishnan.mybrowser.MainActivity.cont;
 
@@ -120,12 +121,16 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
                 dcnt=0;
                 rcnt=0;
                 String[] aExt = exts.split(" ");
+
                 String longLine;
                 for (; (longLine = reader.readLine()) != null; ) {
 
-                    String[] lines=longLine.split(" ");
-                    for(int i=0;i<lines.length;i++)
-                    {line=lines[i];
+                    //String[] lines=longLine.split(" ");
+                    Scanner scanner = new Scanner(longLine).useDelimiter("\\s");
+                    while(scanner.hasNext())
+                    { line= scanner.next();
+
+
                     //System.out.println(line);
                     for(int z=0;z<aExt.length;z++) {
 
