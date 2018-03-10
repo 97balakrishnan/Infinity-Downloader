@@ -145,11 +145,24 @@
 
 
                 </android.support.v7.widget.CardView>
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/urlBox"
+                    android:layout_centerHorizontal="true"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="0"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/progress_bar"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="60dp"
                     android:background="@drawable/rounded_corners1"
                     android:layout_below="@id/urlBox">
                         <com.skyfishjy.library.RippleBackground

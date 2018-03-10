@@ -3,9 +3,12 @@ package com.example.balakrishnan.mybrowser;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -38,6 +41,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +64,9 @@ import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
 import fisk.chipcloud.ChipListener;
 
+import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt;
+import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
+
 public class HomeActivity extends AppCompatActivity {
 
     ImageView backgroundIV;
@@ -71,9 +78,11 @@ public class HomeActivity extends AppCompatActivity {
     TextView welcomeTV;
     TextView clockTV;
     MaterialRippleLayout settingsMRL;
-    ImageView downloadMRL;
+    public static ImageView downloadMRL;
     public static Context cont;
     public int screenWidth,screenHeight;
+    public static boolean isDownload=true;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +98,7 @@ public class HomeActivity extends AppCompatActivity {
         cont=this.getApplicationContext();
         //SearchSuggestion s= new SearchSuggestion();
         init();
+        fn();
         loadBackgroundImage();
         boldFontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         /*sendIV.setOnClickListener(new View.OnClickListener() {
@@ -213,8 +223,10 @@ public class HomeActivity extends AppCompatActivity {
         downloadMRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isValidURL(urlET.getText().toString()))
-                alertBoxWindow();
+                if(isValidURL(urlET.getText().toString())) {
+
+                    alertBoxWindow();
+                }
                 else
                     Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_LONG).show();
             }
@@ -420,6 +432,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }*/
     public void init(){
+        progressBar =(ProgressBar)findViewById(R.id.progress_bar);
         backgroundIV = findViewById(R.id.backgroundIV);
         backgroundIV.setDrawingCacheEnabled(true);
         backgroundIV.animate().alpha(0).start();
@@ -493,7 +506,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    
+
 
     @Override
     protected void onPostResume() {
@@ -554,6 +567,7 @@ public class HomeActivity extends AppCompatActivity {
         System.out.println("onStop removed handler and cache");
         try {
             trimCache(this);
+            clearApplicationData();
             handler.removeCallbacksAndMessages(null);
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -634,5 +648,34 @@ public class HomeActivity extends AppCompatActivity {
 
         // The directory is now empty so delete it
         return dir.delete();
+    }
+    int i=0;
+    public void fn()
+    {
+
+        BroadcastReceiver onComplete=new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+              i++;
+
+
+
+              progressBar.setProgress((i*100)/BackgroundParseTask.cnt);
+                if(BackgroundParseTask.cnt==i)
+                {
+                    System.out.println("Completed "+cnt+" "+cnt1);
+                    Toast.makeText(cont,"Download Complete",Toast.LENGTH_SHORT).show();
+                    HomeActivity.isDownload=false;
+                    Picasso.with(cont).load(R.drawable.share).into(HomeActivity.downloadMRL);
+                }
+            }
+
+        };
+
+
+        registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+
+
     }
 }
