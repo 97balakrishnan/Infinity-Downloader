@@ -1,20 +1,33 @@
 package com.example.balakrishnan.mybrowser;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -23,41 +36,50 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import fisk.chipcloud.ChipCloud;
+import fisk.chipcloud.ChipCloudConfig;
+import fisk.chipcloud.ChipListener;
+
 public class HomeActivity extends AppCompatActivity {
 
-    ImageView backgroundIV,sendIV;
+    ImageView backgroundIV;
+   // ImageView sendIV;
     Typeface regular,bold;
     FontChanger regularFontChanger,boldFontChanger;
     public static EditText urlET;
     TextView welcomeTV;
     TextView clockTV;
     MaterialRippleLayout settingsMRL,downloadMRL;
-
+    public static Context cont;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
 
-        SearchSuggestion s= new SearchSuggestion();
+        cont=this.getApplicationContext();
+        //SearchSuggestion s= new SearchSuggestion();
         init();
         loadBackgroundImage();
         boldFontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
-        sendIV.setOnClickListener(new View.OnClickListener() {
+        /*sendIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -66,21 +88,33 @@ public class HomeActivity extends AppCompatActivity {
                 else
                     Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         urlET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
-                if(urlET.getText().toString().length()!=0)
-                startWebActivity();
+                if(urlET.getText().toString().length()!=0) {
+                   if(isValidURL(urlET.getText().toString()))
+                    alertBoxWindow();
+                   else
+                       Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_LONG).show();
+                    //startWebActivity();
+                }
                 else
                 Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-        SearchSuggestionInitiate();
-        urlET.setOnKeyListener(new View.OnKeyListener() {
+        /*downloadMRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopup(view);
+                System.out.println("1");
+            }
+        });*/
+        //SearchSuggestionInitiate();
+        /*urlET.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if(urlET.length()==0)
@@ -93,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 return true;
             }
-        });
+        });*//*
         urlET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -125,7 +159,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
+        */
         settingsMRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,16 +170,19 @@ public class HomeActivity extends AppCompatActivity {
         downloadMRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(isValidURL(urlET.getText().toString()))
+                alertBoxWindow();
+                else
+                    Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_LONG).show();
             }
         });
 
     }
-    SearchSuggestion s1=new SearchSuggestion();
-    RecyclerView recyclerView;
+    //SearchSuggestion s1=new SearchSuggestion();
+    //RecyclerView recyclerView;
 
     //LinearLayoutManager layoutManager;
-    FlexboxLayoutManager layoutManager;
+    /*FlexboxLayoutManager layoutManager;
     public static SuggestionAdapter sAdapter1;
     public static List<Suggestion> sList1 = new ArrayList<>();
     public void SearchSuggestionInitiate()
@@ -162,19 +199,188 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(sAdapter1);
         s1=new SearchSuggestion();
+    }*/
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this,v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.download_menu, popup.getMenu());
+        popup.show();
+        popup.getMenu().getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(isStoragePermissionGranted()) {
+                    alertBoxWindow();
+                }
+                else{
+                    Toast.makeText(HomeActivity.this,"Storage permission not granted",Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+
     }
-    public void startWebActivity(){
-        Intent intent = new Intent(HomeActivity.this,WebActivity.class);
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Permission is granted");
+                return true;
+            } else {
+
+                System.out.println("Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            System.out.println("PERMISSION GRANTED!");
+            return true;
+        }
+    }
+    public boolean isValidURL(String s)
+    {
+        if(s.startsWith("http://")||s.startsWith("https://"))
+        {
+            return true;
+        }
+        return false;
+    }
+    public void alertBoxWindow()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_layout, null);
+        dialogBuilder.setView(dialogView);
+
+        regularFontChanger.replaceFonts((ViewGroup)dialogView);
+
+        FlexboxLayout flexbox = (FlexboxLayout) dialogView.findViewById(R.id.flexboxLayout);
+
+
+        ChipCloudConfig config = new ChipCloudConfig()
+                .selectMode(ChipCloud.SelectMode.multi)
+                .checkedChipColor(Color.parseColor("#3F51B5"))
+                .checkedTextColor(Color.parseColor("#ffffff"))
+                .uncheckedChipColor(Color.parseColor("#efefef"))
+                .uncheckedTextColor(Color.parseColor("#000000"))
+                .useInsetPadding(true)
+                .typeface(bold);
+        //Create a new ChipCloud with a Context and ViewGroup:
+        ChipCloud chipCloud = new ChipCloud(this, flexbox,config);
+
+
+        chipCloud.addChip(".pdf", ContextCompat.getDrawable(this, R.drawable.pdf),true);
+        chipCloud.addChip(".ppt", ContextCompat.getDrawable(this, R.drawable.ppt),true);
+        chipCloud.addChip(".doc", ContextCompat.getDrawable(this, R.drawable.doc),true);
+        chipCloud.addChip(".xls", ContextCompat.getDrawable(this, R.drawable.xls),true);
+        for(int i=0;i<extensionsSelected.length;i++){
+            if(extensionsSelected[i]){
+                chipCloud.setChecked(i);
+            }
+        }
+
+        chipCloud.setListener(new ChipListener() {
+            @Override
+            public void chipCheckedChange(int i, boolean b, boolean b1) {
+                extensionsSelected[i]=b;
+            }
+        });
+
+        vDpath= dialogView.findViewById(R.id.edit2);
+
+        //cb =dialogView.findViewById(R.id.checkBox);
+        cb2=dialogView.findViewById(R.id.checkBox2);
+
+        //cb.setChecked(true);
+        cb2.setChecked(false);
+
+
+        dialogBuilder.setTitle("Download All");
+
+        vDpath.setText(dpath);
+        dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                //duplFlag=(cb.isChecked())?1:0;
+                //replFlag=(cb2.isChecked())?1:0;
+                dpath=vDpath.getText().toString();
+                CreateDir(dpath);
+
+                exts="";
+                for(int i=0;i<extensionsSelected.length;i++){
+                    if(extensionsSelected[i]){
+                        if(!exts.equals(""))
+                            exts =exts+" "+extensions[i];
+                        else
+                            exts=extensions[i];
+                    }
+                }
+                if(exts.trim().length()==0){
+                    Toast.makeText(HomeActivity.this,"Atlest one extension should be selected",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    System.out.println("Extensions "+exts);
+                    BackgroundParseTask b = new BackgroundParseTask(HomeActivity.this);
+                    b.execute(urlET.getText().toString().trim(), exts);
+                    System.out.println("status:" + urlET);
+                }
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    public void CreateDir(String s)
+    {
+        File dir = new File(s);
+        if(dir.exists())
+        {
+            System.out.println("Directory "+s+" exists");
+        }
+        else {
+            try {
+                if (dir.mkdir()) {
+                    System.out.println("Directory created");
+                } else {
+                    System.out.println("Directory is not created");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        dpath=dir.getPath();
+    }
+    public boolean[] extensionsSelected = {true,false,false,false};
+    public static String exts1 = ".pdf .ppt .pptx .PDF .doc .docx";
+    public String exts = "";
+    private EditText vDpath;
+    private EditText edt;
+    Switch cb;
+    Switch cb2;
+    public static String dpath;
+    public String[] extensions = {".pdf",".ppt",".doc",".xls"};
+    /*public void startDownload(){
+
+        showPopup();
+
+        /*Intent intent = new Intent(HomeActivity.this,WebActivity.class);
         intent.putExtra("url",urlET.getText().toString().trim());
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(HomeActivity.this, urlET,urlET.getTransitionName());
         startActivity(intent,optionsCompat.toBundle());
 
-    }
+    }*/
     public void init(){
         backgroundIV = findViewById(R.id.backgroundIV);
         backgroundIV.setDrawingCacheEnabled(true);
         backgroundIV.animate().alpha(0).start();
-        sendIV = findViewById(R.id.sendIV);
+        //sendIV = findViewById(R.id.sendIV);
         regular = Typeface.createFromAsset(getAssets(), "fonts/product_san_regular.ttf");
         bold = Typeface.createFromAsset(getAssets(),"fonts/product_sans_bold.ttf");
         regularFontChanger = new FontChanger(regular);
@@ -204,7 +410,7 @@ public class HomeActivity extends AppCompatActivity {
                             public void onSuccess() {
                                 if(backgroundIV.getDrawingCache()!=null){
                                     //Changing the color of send icon
-                                    sendIV.setColorFilter(getDominantColor(backgroundIV.getDrawingCache()));
+                                   // sendIV.setColorFilter(getDominantColor(backgroundIV.getDrawingCache()));
                                 }
 
                                 Animation zoomin= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin);

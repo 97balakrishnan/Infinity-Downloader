@@ -1,5 +1,5 @@
 package com.example.balakrishnan.mybrowser;
-
+/*
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,18 +16,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static com.example.balakrishnan.mybrowser.HomeActivity.sAdapter1;
-import static com.example.balakrishnan.mybrowser.HomeActivity.sList1;
-import static com.example.balakrishnan.mybrowser.WebActivity.sAdapter;
-import static com.example.balakrishnan.mybrowser.WebActivity.sList;
 
-/**
- * Created by balakrishnan on 9/3/18.
- */
+Created by balakrishnan on 9/3/18.
+*/
+//public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
 
-public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.MyViewHolder> {
-
-    private List<Suggestion> SuggestionList;
+  /*  private List<Suggestion> SuggestionList;
     Context context;
     Activity act;
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -106,4 +100,4 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.My
     public int getItemCount() {
         return SuggestionList.size();
     }
-}
+}*/

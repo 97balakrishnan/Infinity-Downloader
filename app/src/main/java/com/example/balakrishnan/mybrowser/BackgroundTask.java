@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 
 import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt;
-import static com.example.balakrishnan.mybrowser.WebActivity.dpath;
+import static com.example.balakrishnan.mybrowser.HomeActivity.dpath;
 
 /**
  * Created by balakrishnan on 2/3/18.
@@ -45,7 +45,7 @@ class BackgroundTask extends AsyncTask<String, Void, String> {
 
         request.setDestinationInExternalPublicDir(dirpath, fileName + extension);
 
-        DownloadManager manager = (DownloadManager) WebActivity.cont.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager manager = (DownloadManager) HomeActivity.cont.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
 
         return null;

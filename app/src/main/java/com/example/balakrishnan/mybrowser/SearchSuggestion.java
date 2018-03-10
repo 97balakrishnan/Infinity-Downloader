@@ -18,15 +18,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import android.support.v4.app.SupportActivity;
 
-import static com.example.balakrishnan.mybrowser.HomeActivity.sList1;
-import static com.example.balakrishnan.mybrowser.WebActivity.sAdapter;
-import static com.example.balakrishnan.mybrowser.WebActivity.sList;
 
 /**
  * Created by balakrishnan on 4/3/18.
  */
 
-public class SearchSuggestion {
+/*public class SearchSuggestion {
 
     private int NUMBER_OF_SUGGESTIONS=5;
     SearchSuggestion(){}
@@ -83,4 +80,4 @@ public class SearchSuggestion {
     }
 
 
-}
+}*/

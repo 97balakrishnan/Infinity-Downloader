@@ -1,6 +1,6 @@
 package com.example.balakrishnan.mybrowser;
 
-import android.Manifest;
+/*import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -514,4 +514,4 @@ public class WebActivity extends AppCompatActivity{
     }
 
 
-}
+}*/

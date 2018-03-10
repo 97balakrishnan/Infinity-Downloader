@@ -25,10 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.widget.Toast.LENGTH_LONG;
-import static com.example.balakrishnan.mybrowser.MainActivity.adapter;
-import static com.example.balakrishnan.mybrowser.MainActivity.dpath;
-import static com.example.balakrishnan.mybrowser.MainActivity.hist;
-import static com.example.balakrishnan.mybrowser.WebActivity.swipeRefreshLayout;
 
 /**
  * Created by balakrishnan on 24/11/17.
@@ -70,13 +66,13 @@ public class NewWebViewClient extends WebViewClient {
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        swipeRefreshLayout.setRefreshing(true);
+        //swipeRefreshLayout.setRefreshing(true);
         super.onPageStarted(view, url, favicon);
     }
 
     @Override
     public void onPageFinished(WebView view, String url) {
-        swipeRefreshLayout.setRefreshing(false);
+        //swipeRefreshLayout.setRefreshing(false);
         super.onPageFinished(view, url);
     }
 
