@@ -181,9 +181,16 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
 
-                            android:padding="10dp"
+                            android:padding="20dp"
                             android:src="@drawable/download"
                             android:tint="@android:color/white"/>
+                    <com.example.balakrishnan.mybrowser.CircleProgressBar
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:Thickness="5dp"
+                        android:id="@+id/progress_bar"
+                        app:Color="#ff5454"/>
+
                 </com.skyfishjy.library.RippleBackground>
                 </RelativeLayout>
         </RelativeLayout>

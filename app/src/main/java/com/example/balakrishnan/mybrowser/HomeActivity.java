@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
     public static Context cont;
     public int screenWidth,screenHeight;
     public static boolean isDownload=true;
-    private ProgressBar progressBar;
+    private CircleProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +125,7 @@ public class HomeActivity extends AppCompatActivity {
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 urlET.setText(intent.getStringExtra(Intent.EXTRA_TEXT)); // Handle text being sent
+                downloadRB.startRippleAnimation();
             }
         }
 
@@ -380,7 +381,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }
                 if(exts.trim().length()==0){
-                    Toast.makeText(HomeActivity.this,"Atlest one extension should be selected",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this,"At least one extension should be selected",Toast.LENGTH_SHORT).show();
                 }
                 else {
                     System.out.println("Extensions "+exts);
@@ -439,7 +440,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }*/
     public void init(){
-        progressBar =(ProgressBar)findViewById(R.id.progress_bar);
+        progressBar =  findViewById(R.id.progress_bar);
         backgroundIV = findViewById(R.id.backgroundIV);
         backgroundIV.setDrawingCacheEnabled(true);
         backgroundIV.animate().alpha(0).start();
@@ -463,7 +464,7 @@ public class HomeActivity extends AppCompatActivity {
     public void loadBackgroundImage(){
 
 
-         handler = new Handler();
+        handler = new Handler();
         HomeActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -507,7 +508,7 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         });
 
-                handler.postDelayed(this,10000);
+                handler.postDelayed(this,20000);
             }
         });
 
@@ -562,7 +563,7 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         });
 
-                handler.postDelayed(this,10000);
+                handler.postDelayed(this,20000);
             }
         });
 
@@ -656,6 +657,7 @@ public class HomeActivity extends AppCompatActivity {
         // The directory is now empty so delete it
         return dir.delete();
     }
+
     int i=0;
     public void fn()
     {
@@ -664,15 +666,13 @@ public class HomeActivity extends AppCompatActivity {
             public void onReceive(Context ctxt, Intent intent) {
               i++;
 
-
-
-              progressBar.setProgress((i*100)/BackgroundParseTask.cnt);
+              progressBar.setProgressWithAnimation((i*100)/BackgroundParseTask.cnt);
                 if(BackgroundParseTask.cnt==i)
                 {
                     System.out.println("Completed "+cnt+" "+cnt1);
                     Toast.makeText(cont,"Download Complete",Toast.LENGTH_SHORT).show();
                     HomeActivity.isDownload=false;
-                    Picasso.with(cont).load(R.drawable.share).into(HomeActivity.downloadMRL);
+                    Picasso.with(cont).load(R.drawable.share_icon).into(HomeActivity.downloadMRL);
                     zipFolder(dpath,dpath+".zip");
                 }
             }

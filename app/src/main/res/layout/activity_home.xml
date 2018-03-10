@@ -145,26 +145,15 @@
 
 
                 </android.support.v7.widget.CardView>
-                <ProgressBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/urlBox"
-                    android:layout_centerHorizontal="true"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:indeterminate="false"
-                    android:max="100"
-                    android:progress="0"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/progress_bar"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="60dp"
-                    android:background="@drawable/rounded_corners1"
+                    android:background="@drawable/rounded_corners3"
                     android:layout_below="@id/urlBox">
+
+
                         <com.skyfishjy.library.RippleBackground
                             xmlns:android="http://schemas.android.com/apk/res/android"
                             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -175,6 +164,8 @@
                             app:rb_radius="10dp"
                             android:gravity="center"
                             app:rb_rippleAmount="4"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             app:rb_duration="3000"
                             app:rb_scale="6">
 
@@ -182,11 +173,16 @@
                                     android:id="@+id/downloadMRL"
                                     android:layout_width="80dp"
                                     android:layout_height="80dp"
-
-                                    android:padding="10dp"
+                                    android:padding="20dp"
                                     android:src="@drawable/download"
                                     android:tint="@android:color/white"/>
                         </com.skyfishjy.library.RippleBackground>
+                        <com.example.balakrishnan.mybrowser.CircleProgressBar
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:Thickness="5dp"
+                            android:id="@+id/progress_bar"
+                            app:Color="#ff5454"/>
                 </RelativeLayout>
         </RelativeLayout>
 
