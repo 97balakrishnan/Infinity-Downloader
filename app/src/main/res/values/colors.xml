@@ -7,6 +7,7 @@
     <color name="fab1_color">#000000</color>
     <color name="fab2_color">#000000</color>
     <color name="transparent">#99000000</color>
+    <color name="red">#ff5454</color>
 
     <color name="transparent_black_hex_1">#11000000</color>
     <color name="transparent_black_hex_2">#22000000</color>

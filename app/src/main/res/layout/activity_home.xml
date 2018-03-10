@@ -154,20 +154,7 @@
                     android:layout_below="@id/urlBox">
 
 
-                        <com.skyfishjy.library.RippleBackground
-                            xmlns:android="http://schemas.android.com/apk/res/android"
-                            xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/ripplebg"
-                            app:rb_color="@color/transparent_white_hex_5"
-                            app:rb_radius="10dp"
-                            android:gravity="center"
-                            app:rb_rippleAmount="4"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            app:rb_duration="3000"
-                            app:rb_scale="6">
+
 
                                 <ImageView
                                     android:id="@+id/downloadMRL"
@@ -176,13 +163,13 @@
                                     android:padding="20dp"
                                     android:src="@drawable/download"
                                     android:tint="@android:color/white"/>
-                        </com.skyfishjy.library.RippleBackground>
+
                         <com.example.balakrishnan.mybrowser.CircleProgressBar
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             app:Thickness="5dp"
                             android:id="@+id/progress_bar"
-                            app:Color="#ff5454"/>
+                            app:Color="@color/red"/>
                 </RelativeLayout>
         </RelativeLayout>
 

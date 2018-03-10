@@ -163,18 +163,7 @@
                     android:layout_marginTop="30dp"
                     android:background="@drawable/rounded_corners1"
                     android:layout_below="@id/urlBox">
-                <com.skyfishjy.library.RippleBackground
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ripplebg"
-                    app:rb_color="@color/transparent_white_hex_5"
-                    app:rb_radius="10dp"
-                    android:gravity="center"
-                    app:rb_rippleAmount="4"
-                    app:rb_duration="3000"
-                    app:rb_scale="6">
+
 
                         <ImageView
                             android:id="@+id/downloadMRL"
@@ -189,9 +178,8 @@
                         android:layout_height="80dp"
                         app:Thickness="5dp"
                         android:id="@+id/progress_bar"
-                        app:Color="#ff5454"/>
+                        app:Color="@color/red"/>
 
-                </com.skyfishjy.library.RippleBackground>
                 </RelativeLayout>
         </RelativeLayout>
 

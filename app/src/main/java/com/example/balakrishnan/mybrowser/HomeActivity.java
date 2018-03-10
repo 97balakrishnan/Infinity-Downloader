@@ -77,9 +77,9 @@ import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
 public class HomeActivity extends AppCompatActivity {
 
     ImageView backgroundIV;
-   // ImageView sendIV;
+    BroadcastReceiver onComplete;
+    // ImageView sendIV;
     Typeface regular,bold;
-    RippleBackground downloadRB;
     FontChanger regularFontChanger,boldFontChanger;
     public static EditText urlET;
     TextView welcomeTV;
@@ -125,7 +125,7 @@ public class HomeActivity extends AppCompatActivity {
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 urlET.setText(intent.getStringExtra(Intent.EXTRA_TEXT)); // Handle text being sent
-                downloadRB.startRippleAnimation();
+
             }
         }
 
@@ -138,10 +138,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.toString().trim().length()!=0){
-                    downloadRB.startRippleAnimation();
+
                 }
                 else{
-                    downloadRB.stopRippleAnimation();
+                    progressBar.setColor(getResources().getColor(R.color.red));
+                    progressBar.setProgressWithAnimation(0);
+                    Picasso.with(cont).load(R.drawable.download).into(HomeActivity.downloadMRL);
+                    isDownload=true;
+
                 }
             }
 
@@ -231,12 +235,17 @@ public class HomeActivity extends AppCompatActivity {
         downloadMRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isValidURL(urlET.getText().toString())) {
+                if(isDownload) {
 
-                    alertBoxWindow();
+                    if (isValidURL(urlET.getText().toString())) {
+
+                        alertBoxWindow();
+                    } else
+                        Toast.makeText(getApplicationContext(), "Invalid URL", Toast.LENGTH_LONG).show();
+
+                }else{
+                    //TODO finish share intent
                 }
-                else
-                    Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -456,7 +465,7 @@ public class HomeActivity extends AppCompatActivity {
         clockTV = findViewById(R.id.textClock);
         settingsMRL = findViewById(R.id.settingsMRL);
         downloadMRL = findViewById(R.id.downloadMRL);
-        downloadRB = findViewById(R.id.ripplebg);
+
 
 
     }
@@ -514,74 +523,22 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        handler = new Handler();
-        HomeActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Picasso.with(getApplicationContext())
-                        .load("https://source.unsplash.com/collection/1850974/"+screenHeight+"x"+screenWidth)
-                        .skipMemoryCache()
-                        .into(backgroundIV, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                if(backgroundIV.getDrawingCache()!=null){
-                                    //Changing the color of send icon
-                                    // sendIV.setColorFilter(getDominantColor(backgroundIV.getDrawingCache()));
-                                }
-
-                                Animation zoomin= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin);
-                                zoomin.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-                                        backgroundIV.animate().alpha(1).setDuration(2000).start();
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        backgroundIV.animate().alpha(0).setDuration(2000).start();
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-
-                                    }
-                                });
-                                backgroundIV.setAnimation(zoomin);
-                                backgroundIV.startAnimation(zoomin);
-
-                            }
-
-
-                            @Override
-                            public void onError() {
-                                Toast.makeText(getApplicationContext(),"No internet!",Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-                handler.postDelayed(this,20000);
-            }
-        });
-
-    }
-
     @Override
     protected void onStop() {
+
         super.onStop();
         System.out.println("onStop removed handler and cache");
         try {
             trimCache(this);
             clearApplicationData();
+            unregisterReceiver(onComplete);
             handler.removeCallbacksAndMessages(null);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        }
+
+    }
 
     //Getting dominant color from wallpaper
     public static int getDominantColor(Bitmap bitmap) {
@@ -610,10 +567,12 @@ public class HomeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         System.out.println("app destroyed");
+
         try {
             trimCache(this);
             clearApplicationData();
             handler.removeCallbacksAndMessages(null);
+            unregisterReceiver(onComplete);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -661,8 +620,7 @@ public class HomeActivity extends AppCompatActivity {
     int i=0;
     public void fn()
     {
-
-        BroadcastReceiver onComplete=new BroadcastReceiver() {
+        onComplete=new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
               i++;
 
@@ -671,9 +629,10 @@ public class HomeActivity extends AppCompatActivity {
                 {
                     System.out.println("Completed "+cnt+" "+cnt1);
                     Toast.makeText(cont,"Download Complete",Toast.LENGTH_SHORT).show();
+                    progressBar.setColor(Color.GREEN);
                     HomeActivity.isDownload=false;
                     Picasso.with(cont).load(R.drawable.share_icon).into(HomeActivity.downloadMRL);
-                    zipFolder(dpath,dpath+".zip");
+                    //zipFolder(dpath,dpath+".zip");
                 }
             }
 
