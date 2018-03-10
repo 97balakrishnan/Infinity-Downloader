@@ -45,6 +45,7 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.skyfishjy.library.RippleBackground;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -62,17 +63,20 @@ public class HomeActivity extends AppCompatActivity {
     ImageView backgroundIV;
    // ImageView sendIV;
     Typeface regular,bold;
+    RippleBackground downloadRB;
     FontChanger regularFontChanger,boldFontChanger;
     public static EditText urlET;
     TextView welcomeTV;
     TextView clockTV;
-    MaterialRippleLayout settingsMRL,downloadMRL;
+    MaterialRippleLayout settingsMRL;
+    ImageView downloadMRL;
     public static Context cont;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
+
 
         cont=this.getApplicationContext();
         //SearchSuggestion s= new SearchSuggestion();
@@ -89,6 +93,37 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Please Enter URL",Toast.LENGTH_SHORT).show();
             }
         });*/
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                urlET.setText(intent.getStringExtra(Intent.EXTRA_TEXT)); // Handle text being sent
+            }
+        }
+
+        urlET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.toString().trim().length()!=0){
+                    downloadRB.startRippleAnimation();
+                }
+                else{
+                    downloadRB.stopRippleAnimation();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         urlET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -392,6 +427,8 @@ public class HomeActivity extends AppCompatActivity {
         clockTV = findViewById(R.id.textClock);
         settingsMRL = findViewById(R.id.settingsMRL);
         downloadMRL = findViewById(R.id.downloadMRL);
+        downloadRB = findViewById(R.id.ripplebg);
+
 
     }
 

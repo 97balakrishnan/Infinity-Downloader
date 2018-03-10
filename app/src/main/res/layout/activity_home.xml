@@ -145,24 +145,36 @@
 
 
                 </android.support.v7.widget.CardView>
-                <com.balysv.materialripple.MaterialRippleLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_corners1"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/urlBox"
-                    android:id="@+id/downloadMRL"
-                    app:mrl_rippleColor="@color/transparent_white_percent_50"
-                    app:mrl_rippleRoundedCorners="10dp"
-                    android:layout_marginTop="30dp">
-                        <ImageView
-                            android:id="@+id/download_button"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:padding="10dp"
-                            android:src="@drawable/download"
-                            android:tint="@android:color/white"/>
-                </com.balysv.materialripple.MaterialRippleLayout>
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/rounded_corners1"
+                    android:layout_below="@id/urlBox">
+                        <com.skyfishjy.library.RippleBackground
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ripplebg"
+                            app:rb_color="@color/transparent_white_hex_5"
+                            app:rb_radius="10dp"
+                            android:gravity="center"
+                            app:rb_rippleAmount="4"
+                            app:rb_duration="3000"
+                            app:rb_scale="6">
+
+                                <ImageView
+                                    android:id="@+id/downloadMRL"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+
+                                    android:padding="10dp"
+                                    android:src="@drawable/download"
+                                    android:tint="@android:color/white"/>
+                        </com.skyfishjy.library.RippleBackground>
+                </RelativeLayout>
         </RelativeLayout>
 
 </RelativeLayout>
