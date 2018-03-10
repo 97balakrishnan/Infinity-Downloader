@@ -95,6 +95,7 @@ public class HomeActivity extends AppCompatActivity {
     public int screenWidth,screenHeight;
     public static boolean isDownload=true;
     private CircleProgressBar progressBar;
+    private boolean zipFlag=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +143,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                zipFlag=false;
                 if(charSequence.toString().trim().length()!=0){
 
                 }
@@ -250,9 +252,26 @@ public class HomeActivity extends AppCompatActivity {
 
                 }
                 else{
-                    ZipTask z = new ZipTask(dpath,dpath+".zip");
-                    z.execute();
+                    if(zipFlag==false) {
 
+                        ZipTask z = new ZipTask(dpath, dpath + ".zip");
+                        z.execute();
+                        File zipFile = Environment.getExternalStoragePublicDirectory(dpath+".zip");
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(zipFile));
+                        sendIntent.setType("application/zip");
+                        startActivity(sendIntent);
+                    }
+                    else
+                    {
+                        File zipFile = Environment.getExternalStoragePublicDirectory(dpath+".zip");
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(zipFile));
+                        sendIntent.setType("application/zip");
+                        startActivity(sendIntent);
+                    }
                 }
             }
         });
@@ -674,7 +693,7 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            //TODO Share Intent
+            zipFlag=true;
 
         }
 
@@ -713,12 +732,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 zos.close();
                 
-                File zipFile = new File(folderpath);
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(zipFile));
-                sendIntent.setType("application/zip");
-                startActivity(sendIntent);
+
 
             } catch (IOException ioe) {
                 Log.e("", ioe.getMessage());
