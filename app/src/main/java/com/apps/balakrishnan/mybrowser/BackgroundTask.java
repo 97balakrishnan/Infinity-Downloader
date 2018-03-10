@@ -1,21 +1,15 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.widget.Toast;
-import android.content.BroadcastReceiver;
 
-import com.squareup.picasso.Picasso;
-
-import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt;
-import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
-import static com.example.balakrishnan.mybrowser.HomeActivity.cont;
-import static com.example.balakrishnan.mybrowser.HomeActivity.dpath;
+import static com.apps.balakrishnan.mybrowser.BackgroundParseTask.cnt;
+import static com.apps.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
+import static com.apps.balakrishnan.mybrowser.HomeActivity.cont;
+import static com.apps.balakrishnan.mybrowser.HomeActivity.dpath;
 
 /**
  * Created by balakrishnan on 2/3/18.

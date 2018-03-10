@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@android:color/black"
-    tools:context="com.example.balakrishnan.mybrowser.HomeActivity">
+    tools:context="com.apps.balakrishnan.mybrowser.HomeActivity">
 
         <ImageView
             android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                                     android:src="@drawable/download"
                                     android:tint="@android:color/white"/>
 
-                        <com.example.balakrishnan.mybrowser.CircleProgressBar
+                        <com.apps.balakrishnan.mybrowser.CircleProgressBar
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             app:Thickness="5dp"

@@ -1,4 +1,4 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

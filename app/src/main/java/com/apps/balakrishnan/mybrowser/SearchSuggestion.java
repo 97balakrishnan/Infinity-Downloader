@@ -1,22 +1,4 @@
-package com.example.balakrishnan.mybrowser;
-
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.XML;
-
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import android.support.v4.app.SupportActivity;
+package com.apps.balakrishnan.mybrowser;
 
 
 /**

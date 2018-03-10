@@ -1,4 +1,4 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 
 /**
  * Created by shrikanthravi on 26/02/18.
