@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -78,6 +79,7 @@ import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt;
 import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
 
 public class HomeActivity extends AppCompatActivity {
+
 
     ImageView backgroundIV;
     BroadcastReceiver onComplete;
@@ -710,6 +712,14 @@ public class HomeActivity extends AppCompatActivity {
                     fis.close();
                 }
                 zos.close();
+                
+                File zipFile = new File(folderpath);
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(zipFile));
+                sendIntent.setType("application/zip");
+                startActivity(sendIntent);
+
             } catch (IOException ioe) {
                 Log.e("", ioe.getMessage());
             }
