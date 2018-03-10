@@ -1,4 +1,4 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

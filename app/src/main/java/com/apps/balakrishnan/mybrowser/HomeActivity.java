@@ -1,7 +1,6 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -15,21 +14,17 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.graphics.Palette;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -45,29 +40,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
-import com.skyfishjy.library.RippleBackground;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -75,8 +61,8 @@ import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
 import fisk.chipcloud.ChipListener;
 
-import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt;
-import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
+import static com.apps.balakrishnan.mybrowser.BackgroundParseTask.cnt;
+import static com.apps.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -254,6 +240,9 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 else{
                     if(zipFlag==false) {
+                        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                        StrictMode.setVmPolicy(builder.build());
+                        builder.detectFileUriExposure();
 
                         ZipTask z = new ZipTask(dpath, dpath + ".zip");
                         z.execute();
@@ -266,6 +255,10 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     else
                     {
+
+                        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                        StrictMode.setVmPolicy(builder.build());
+                        builder.detectFileUriExposure();
                         File zipFile = Environment.getExternalStoragePublicDirectory(dpath+".zip");
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);

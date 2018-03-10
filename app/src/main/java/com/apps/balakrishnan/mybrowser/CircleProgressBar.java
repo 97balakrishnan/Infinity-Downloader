@@ -1,24 +1,18 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by shrikanthravi on 10/02/18.

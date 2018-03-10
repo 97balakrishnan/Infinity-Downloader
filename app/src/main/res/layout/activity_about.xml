@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent"
-    tools:context="com.example.balakrishnan.mybrowser.AboutActivity">
+    tools:context="com.apps.balakrishnan.mybrowser.AboutActivity">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

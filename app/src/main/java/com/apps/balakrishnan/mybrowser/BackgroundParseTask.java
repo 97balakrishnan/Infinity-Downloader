@@ -1,21 +1,16 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-
-import static com.example.balakrishnan.mybrowser.MainActivity.cont;
 
 /**
  * Created by balakrishnan on 2/3/18.

@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.example.balakrishnan.mybrowser.WebActivity">
+    tools:context="com.apps.balakrishnan.mybrowser.WebActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

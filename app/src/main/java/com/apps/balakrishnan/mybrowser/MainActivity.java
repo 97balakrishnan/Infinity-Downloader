@@ -1,71 +1,41 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 
-import android.app.ActionBar;
-import android.app.DownloadManager;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.URLUtil;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.CompoundButton;
 import android.widget.DigitalClock;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.ArrayList;
-
-import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 
 public class MainActivity extends AppCompatActivity {

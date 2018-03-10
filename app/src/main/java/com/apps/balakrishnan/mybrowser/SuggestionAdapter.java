@@ -1,4 +1,4 @@
-package com.example.balakrishnan.mybrowser;
+package com.apps.balakrishnan.mybrowser;
 /*
 import android.app.Activity;
 import android.content.Context;
