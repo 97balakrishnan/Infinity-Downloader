@@ -448,7 +448,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Picasso.with(getApplicationContext())
-                        .load("https://source.unsplash.com/collection/319663/"+screenHeight+"x"+screenWidth)
+                        .load("https://source.unsplash.com/collection/1850974/"+screenHeight+"x"+screenWidth)
                         .skipMemoryCache()
                         .into(backgroundIV, new Callback() {
                             @Override

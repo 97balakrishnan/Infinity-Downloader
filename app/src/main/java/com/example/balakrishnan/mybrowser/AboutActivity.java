@@ -50,7 +50,7 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Picasso.with(getApplicationContext())
-                        .load("https://source.unsplash.com/collection/319663")
+                        .load("https://source.unsplash.com/collection/1850974")
                         .skipMemoryCache()
                         .into(backgroundIV, new Callback() {
                             @Override
