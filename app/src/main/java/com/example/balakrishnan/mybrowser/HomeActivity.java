@@ -487,10 +487,10 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    Handler handler;
+
     public void loadBackgroundImage(){
 
-
+        final Handler handler;
         handler = new Handler();
         HomeActivity.this.runOnUiThread(new Runnable() {
             @Override
@@ -550,7 +550,7 @@ public class HomeActivity extends AppCompatActivity {
             trimCache(this);
             clearApplicationData();
             unregisterReceiver(onComplete);
-            handler.removeCallbacksAndMessages(null);
+
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -589,7 +589,7 @@ public class HomeActivity extends AppCompatActivity {
         try {
             trimCache(this);
             clearApplicationData();
-            handler.removeCallbacksAndMessages(null);
+
             unregisterReceiver(onComplete);
         } catch (Exception e) {
             // TODO Auto-generated catch block
