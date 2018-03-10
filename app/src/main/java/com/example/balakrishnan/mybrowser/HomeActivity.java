@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -28,6 +29,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -57,8 +59,13 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
@@ -666,6 +673,7 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(cont,"Download Complete",Toast.LENGTH_SHORT).show();
                     HomeActivity.isDownload=false;
                     Picasso.with(cont).load(R.drawable.share).into(HomeActivity.downloadMRL);
+                    zipFolder(dpath,dpath+".zip");
                 }
             }
 
@@ -677,5 +685,31 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+    }
+    private void zipFolder(String inputFolderPath, String outZipPath) {
+        try {
+
+            //CreateDir(Environment.getExternalStoragePublicDirectory(outZipPath).toString());
+            FileOutputStream fos = new FileOutputStream(Environment.getExternalStoragePublicDirectory(outZipPath));
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            File srcFile = new File(Environment.getExternalStoragePublicDirectory(inputFolderPath).toString());
+            File[] files = srcFile.listFiles();
+            Log.d("", "Zip directory: " + srcFile.getName());
+            for (int i = 0; i < files.length; i++) {
+                Log.d("", "Adding file: " + files[i].getName());
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = new FileInputStream(files[i]);
+                zos.putNextEntry(new ZipEntry(files[i].getName()));
+                int length;
+                while ((length = fis.read(buffer)) > 0) {
+                    zos.write(buffer, 0, length);
+                }
+                zos.closeEntry();
+                fis.close();
+            }
+            zos.close();
+        } catch (IOException ioe) {
+            Log.e("", ioe.getMessage());
+        }
     }
 }
