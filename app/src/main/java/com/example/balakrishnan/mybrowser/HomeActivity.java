@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -243,8 +246,11 @@ public class HomeActivity extends AppCompatActivity {
                     } else
                         Toast.makeText(getApplicationContext(), "Invalid URL", Toast.LENGTH_LONG).show();
 
-                }else{
-                    //TODO finish share intent
+                }
+                else{
+                    ZipTask z = new ZipTask(dpath,dpath+".zip");
+                    z.execute();
+
                 }
             }
         });
@@ -466,8 +472,20 @@ public class HomeActivity extends AppCompatActivity {
         settingsMRL = findViewById(R.id.settingsMRL);
         downloadMRL = findViewById(R.id.downloadMRL);
 
+        try{
 
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
+            ClipData c= clipboard.getPrimaryClip();
+            String s=c.getItemAt(0).getText().toString();
+            if(s.startsWith("http://")||s.startsWith("https://"))
+            urlET.setText(s);
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     Handler handler;
     public void loadBackgroundImage(){
@@ -645,30 +663,56 @@ public class HomeActivity extends AppCompatActivity {
 
 
     }
-    private void zipFolder(String inputFolderPath, String outZipPath) {
-        try {
 
-            //CreateDir(Environment.getExternalStoragePublicDirectory(outZipPath).toString());
-            FileOutputStream fos = new FileOutputStream(Environment.getExternalStoragePublicDirectory(outZipPath));
-            ZipOutputStream zos = new ZipOutputStream(fos);
-            File srcFile = new File(Environment.getExternalStoragePublicDirectory(inputFolderPath).toString());
-            File[] files = srcFile.listFiles();
-            Log.d("", "Zip directory: " + srcFile.getName());
-            for (int i = 0; i < files.length; i++) {
-                Log.d("", "Adding file: " + files[i].getName());
-                byte[] buffer = new byte[1024];
-                FileInputStream fis = new FileInputStream(files[i]);
-                zos.putNextEntry(new ZipEntry(files[i].getName()));
-                int length;
-                while ((length = fis.read(buffer)) > 0) {
-                    zos.write(buffer, 0, length);
+    class ZipTask extends AsyncTask<Void, Void, Void> {
+        ZipTask(){}
+        String inputFolderPath,outputZipPath;
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            //TODO Share Intent
+
+        }
+
+        ZipTask(String inputFolderPath, String outputZipPath)
+        {
+            this.inputFolderPath=inputFolderPath;
+            this.outputZipPath = outputZipPath;
+
+        }
+        @Override
+        protected Void doInBackground(Void... args) {
+
+            zipFolder(inputFolderPath,outputZipPath);
+            return null;
+        }
+        private void zipFolder(String inputFolderPath, String outZipPath) {
+            try {
+
+                //CreateDir(Environment.getExternalStoragePublicDirectory(outZipPath).toString());
+                FileOutputStream fos = new FileOutputStream(Environment.getExternalStoragePublicDirectory(outZipPath));
+                ZipOutputStream zos = new ZipOutputStream(fos);
+                File srcFile = new File(Environment.getExternalStoragePublicDirectory(inputFolderPath).toString());
+                File[] files = srcFile.listFiles();
+                Log.d("", "Zip directory: " + srcFile.getName());
+                for (int i = 0; i < files.length; i++) {
+                    Log.d("", "Adding file: " + files[i].getName());
+                    byte[] buffer = new byte[1024];
+                    FileInputStream fis = new FileInputStream(files[i]);
+                    zos.putNextEntry(new ZipEntry(files[i].getName()));
+                    int length;
+                    while ((length = fis.read(buffer)) > 0) {
+                        zos.write(buffer, 0, length);
+                    }
+                    zos.closeEntry();
+                    fis.close();
                 }
-                zos.closeEntry();
-                fis.close();
+                zos.close();
+            } catch (IOException ioe) {
+                Log.e("", ioe.getMessage());
             }
-            zos.close();
-        } catch (IOException ioe) {
-            Log.e("", ioe.getMessage());
         }
     }
 }
