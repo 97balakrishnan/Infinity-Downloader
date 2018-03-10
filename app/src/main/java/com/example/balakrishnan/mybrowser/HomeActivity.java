@@ -439,11 +439,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
     }
-
+    Handler handler;
     public void loadBackgroundImage(){
 
 
-        final Handler handler = new Handler();
+         handler = new Handler();
         HomeActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -487,11 +487,79 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         });
 
-                handler.postDelayed(this,20000);
+                handler.postDelayed(this,10000);
             }
         });
 
     }
+
+    
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        handler = new Handler();
+        HomeActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Picasso.with(getApplicationContext())
+                        .load("https://source.unsplash.com/collection/1850974/"+screenHeight+"x"+screenWidth)
+                        .skipMemoryCache()
+                        .into(backgroundIV, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                if(backgroundIV.getDrawingCache()!=null){
+                                    //Changing the color of send icon
+                                    // sendIV.setColorFilter(getDominantColor(backgroundIV.getDrawingCache()));
+                                }
+
+                                Animation zoomin= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin);
+                                zoomin.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        backgroundIV.animate().alpha(1).setDuration(2000).start();
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        backgroundIV.animate().alpha(0).setDuration(2000).start();
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+
+                                    }
+                                });
+                                backgroundIV.setAnimation(zoomin);
+                                backgroundIV.startAnimation(zoomin);
+
+                            }
+
+
+                            @Override
+                            public void onError() {
+                                Toast.makeText(getApplicationContext(),"No internet!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                handler.postDelayed(this,10000);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("onStop removed handler and cache");
+        try {
+            trimCache(this);
+            handler.removeCallbacksAndMessages(null);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        }
 
     //Getting dominant color from wallpaper
     public static int getDominantColor(Bitmap bitmap) {
@@ -515,5 +583,56 @@ public class HomeActivity extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
 
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("app destroyed");
+        try {
+            trimCache(this);
+            clearApplicationData();
+            handler.removeCallbacksAndMessages(null);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static void trimCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            if (dir != null && dir.isDirectory()) {
+                deleteDir(dir);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+    public void clearApplicationData()
+    {
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    deleteDir(new File(appDir, s));
+                }
+            }
+        }
+    }
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir.delete();
     }
 }
