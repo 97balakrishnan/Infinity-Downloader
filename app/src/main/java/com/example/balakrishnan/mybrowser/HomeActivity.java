@@ -24,12 +24,14 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -71,12 +73,18 @@ public class HomeActivity extends AppCompatActivity {
     MaterialRippleLayout settingsMRL;
     ImageView downloadMRL;
     public static Context cont;
+    public int screenWidth,screenHeight;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        screenWidth = displayMetrics.widthPixels;
+        screenHeight = displayMetrics.heightPixels;
 
         cont=this.getApplicationContext();
         //SearchSuggestion s= new SearchSuggestion();
@@ -440,7 +448,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Picasso.with(getApplicationContext())
-                        .load("https://source.unsplash.com/collection/319663")
+                        .load("https://source.unsplash.com/collection/319663/"+screenHeight+"x"+screenWidth)
                         .skipMemoryCache()
                         .into(backgroundIV, new Callback() {
                             @Override
