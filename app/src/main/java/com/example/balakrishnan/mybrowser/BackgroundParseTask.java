@@ -7,6 +7,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +23,7 @@ import static com.example.balakrishnan.mybrowser.MainActivity.cont;
 
 public class BackgroundParseTask extends AsyncTask<String, Void, String> {
     public static int cnt;
+    public static int cnt1=0;
     private int dcnt;
     private int rcnt;
     private String msg;
@@ -54,8 +57,8 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
         act.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("post execution");
-                Toast.makeText(act.getApplicationContext(),"Downloaded "+cnt+" files \n "+dcnt+" Duplicate files ignored",Toast.LENGTH_LONG).show();
+
+                Toast.makeText(act.getApplicationContext(),"Downloading "+cnt+" files \n "+dcnt+" Duplicate files ignored",Toast.LENGTH_LONG).show();
 
             }
         });
@@ -123,13 +126,13 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
                     String[] lines=longLine.split(" ");
                     for(int i=0;i<lines.length;i++)
                     {line=lines[i];
-                    System.out.println(line);
+                    //System.out.println(line);
                     for(int z=0;z<aExt.length;z++) {
 
                         String fileLink;
                             if((fileLink=compute(line,aExt[z]))!=null)
                             {
-                                System.out.println("fileLink:"+fileLink);
+                                //System.out.println("fileLink:"+fileLink);
                                 DownloadLinkChecker dlc = new DownloadLinkChecker(fileLink,aExt);
                                 if(dlc.isDownloadLink())
                                     cnt++;

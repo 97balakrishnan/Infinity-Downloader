@@ -2,11 +2,19 @@ package com.example.balakrishnan.mybrowser;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.widget.Toast;
+import android.content.BroadcastReceiver;
+
+import com.squareup.picasso.Picasso;
 
 import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt;
+import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
+import static com.example.balakrishnan.mybrowser.HomeActivity.cont;
 import static com.example.balakrishnan.mybrowser.HomeActivity.dpath;
 
 /**
@@ -21,7 +29,11 @@ class BackgroundTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
+        cnt1++;
+        if(cnt== cnt1)
+        {
 
+        }
     }
 
     @Override
@@ -45,9 +57,10 @@ class BackgroundTask extends AsyncTask<String, Void, String> {
 
         request.setDestinationInExternalPublicDir(dirpath, fileName + extension);
 
-        DownloadManager manager = (DownloadManager) HomeActivity.cont.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager manager = (DownloadManager) cont.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
-
         return null;
+
+
     }
 }

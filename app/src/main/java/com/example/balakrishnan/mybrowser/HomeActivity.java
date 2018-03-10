@@ -3,15 +3,19 @@ package com.example.balakrishnan.mybrowser;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -25,6 +29,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -38,6 +43,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,12 +59,20 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
 import fisk.chipcloud.ChipListener;
+
+import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt;
+import static com.example.balakrishnan.mybrowser.BackgroundParseTask.cnt1;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -71,9 +85,11 @@ public class HomeActivity extends AppCompatActivity {
     TextView welcomeTV;
     TextView clockTV;
     MaterialRippleLayout settingsMRL;
-    ImageView downloadMRL;
+    public static ImageView downloadMRL;
     public static Context cont;
     public int screenWidth,screenHeight;
+    public static boolean isDownload=true;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +105,7 @@ public class HomeActivity extends AppCompatActivity {
         cont=this.getApplicationContext();
         //SearchSuggestion s= new SearchSuggestion();
         init();
+        fn();
         loadBackgroundImage();
         boldFontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
         /*sendIV.setOnClickListener(new View.OnClickListener() {
@@ -213,8 +230,10 @@ public class HomeActivity extends AppCompatActivity {
         downloadMRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isValidURL(urlET.getText().toString()))
-                alertBoxWindow();
+                if(isValidURL(urlET.getText().toString())) {
+
+                    alertBoxWindow();
+                }
                 else
                     Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_LONG).show();
             }
@@ -420,6 +439,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }*/
     public void init(){
+        progressBar =(ProgressBar)findViewById(R.id.progress_bar);
         backgroundIV = findViewById(R.id.backgroundIV);
         backgroundIV.setDrawingCacheEnabled(true);
         backgroundIV.animate().alpha(0).start();
@@ -493,7 +513,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    
+
 
     @Override
     protected void onPostResume() {
@@ -554,6 +574,7 @@ public class HomeActivity extends AppCompatActivity {
         System.out.println("onStop removed handler and cache");
         try {
             trimCache(this);
+            clearApplicationData();
             handler.removeCallbacksAndMessages(null);
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -634,5 +655,61 @@ public class HomeActivity extends AppCompatActivity {
 
         // The directory is now empty so delete it
         return dir.delete();
+    }
+    int i=0;
+    public void fn()
+    {
+
+        BroadcastReceiver onComplete=new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+              i++;
+
+
+
+              progressBar.setProgress((i*100)/BackgroundParseTask.cnt);
+                if(BackgroundParseTask.cnt==i)
+                {
+                    System.out.println("Completed "+cnt+" "+cnt1);
+                    Toast.makeText(cont,"Download Complete",Toast.LENGTH_SHORT).show();
+                    HomeActivity.isDownload=false;
+                    Picasso.with(cont).load(R.drawable.share).into(HomeActivity.downloadMRL);
+                    zipFolder(dpath,dpath+".zip");
+                }
+            }
+
+        };
+
+
+        registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+
+
+    }
+    private void zipFolder(String inputFolderPath, String outZipPath) {
+        try {
+
+            //CreateDir(Environment.getExternalStoragePublicDirectory(outZipPath).toString());
+            FileOutputStream fos = new FileOutputStream(Environment.getExternalStoragePublicDirectory(outZipPath));
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            File srcFile = new File(Environment.getExternalStoragePublicDirectory(inputFolderPath).toString());
+            File[] files = srcFile.listFiles();
+            Log.d("", "Zip directory: " + srcFile.getName());
+            for (int i = 0; i < files.length; i++) {
+                Log.d("", "Adding file: " + files[i].getName());
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = new FileInputStream(files[i]);
+                zos.putNextEntry(new ZipEntry(files[i].getName()));
+                int length;
+                while ((length = fis.read(buffer)) > 0) {
+                    zos.write(buffer, 0, length);
+                }
+                zos.closeEntry();
+                fis.close();
+            }
+            zos.close();
+        } catch (IOException ioe) {
+            Log.e("", ioe.getMessage());
+        }
     }
 }
