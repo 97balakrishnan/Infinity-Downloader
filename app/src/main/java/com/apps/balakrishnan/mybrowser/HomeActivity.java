@@ -737,4 +737,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(BackgroundParseTask.cnt!=0 && i!=BackgroundParseTask.cnt)
+        progressBar.setProgressWithAnimation((i*100)/BackgroundParseTask.cnt);
+    }
 }

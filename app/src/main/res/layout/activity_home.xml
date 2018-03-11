@@ -72,11 +72,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="72dp"
+                    android:layout_marginTop="0dp"
                     android:background="@drawable/rounded_corners1"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:text="Welcome User"
+                    android:textAlignment="center"
+
+                    android:text="Infinity \nDownloader"
                     android:textColor="@android:color/white"
                     android:textSize="40sp" />
 
