@@ -14,7 +14,9 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.apps.balakrishnan.mybrowser.HomeActivity">
+        <activity android:name="com.apps.balakrishnan.mybrowser.HomeActivity"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -157,7 +157,7 @@ public class HomeActivity extends AppCompatActivity {
                    if(isValidURL(urlET.getText().toString()))
                     alertBoxWindow();
                    else
-                       Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_LONG).show();
+                       Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_SHORT).show();
                     //startWebActivity();
                 }
                 else
@@ -234,8 +234,9 @@ public class HomeActivity extends AppCompatActivity {
                     if (isValidURL(urlET.getText().toString())) {
 
                         alertBoxWindow();
+                        downloadMRL.setEnabled(false);
                     } else
-                        Toast.makeText(getApplicationContext(), "Invalid URL", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Invalid URL", Toast.LENGTH_SHORT).show();
 
                 }
                 else{
@@ -392,7 +393,8 @@ public class HomeActivity extends AppCompatActivity {
 
         dialogBuilder.setTitle("Download All");
 
-        vDpath.setText(dpath);
+        //vDpath.setText(dpath);
+        vDpath.setSelection(vDpath.getText().toString().length());
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -547,7 +549,7 @@ public class HomeActivity extends AppCompatActivity {
 
                             @Override
                             public void onError() {
-                                Toast.makeText(getApplicationContext(),"No internet!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"No internet!",Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -565,7 +567,7 @@ public class HomeActivity extends AppCompatActivity {
         try {
             trimCache(this);
             clearApplicationData();
-            unregisterReceiver(onComplete);
+           // unregisterReceiver(onComplete);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -661,6 +663,7 @@ public class HomeActivity extends AppCompatActivity {
               progressBar.setProgressWithAnimation((i*100)/BackgroundParseTask.cnt);
                 if(BackgroundParseTask.cnt==i)
                 {
+                    downloadMRL.setEnabled(true);
                     System.out.println("Completed "+cnt+" "+cnt1);
                     Toast.makeText(cont,"Download Complete",Toast.LENGTH_SHORT).show();
                     progressBar.setColor(Color.GREEN);

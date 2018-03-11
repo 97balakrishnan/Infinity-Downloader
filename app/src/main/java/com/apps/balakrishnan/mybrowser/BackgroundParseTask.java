@@ -54,8 +54,10 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
             @Override
             public void run() {
 
-                Toast.makeText(act.getApplicationContext(),"Downloading "+cnt+" files \n "+dcnt+" Duplicate files ignored",Toast.LENGTH_LONG).show();
-
+                if(cnt>0)
+                    Toast.makeText(act.getApplicationContext(),"Downloading "+cnt+" files \n "+dcnt+" Duplicate files ignored",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(act.getApplicationContext(),"No files to download",Toast.LENGTH_SHORT).show();
             }
         });
     }
