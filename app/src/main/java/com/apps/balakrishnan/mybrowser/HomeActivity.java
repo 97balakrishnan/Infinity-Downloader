@@ -157,7 +157,7 @@ public class HomeActivity extends AppCompatActivity {
                    if(isValidURL(urlET.getText().toString()))
                     alertBoxWindow();
                    else
-                       Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_SHORT).show();
+                   {Toast.makeText(getApplicationContext(),"Invalid URL",Toast.LENGTH_SHORT).show();}
                     //startWebActivity();
                 }
                 else
@@ -234,7 +234,7 @@ public class HomeActivity extends AppCompatActivity {
                     if (isValidURL(urlET.getText().toString())) {
 
                         alertBoxWindow();
-                        downloadMRL.setEnabled(false);
+
                     } else
                         Toast.makeText(getApplicationContext(), "Invalid URL", Toast.LENGTH_SHORT).show();
 
@@ -337,7 +337,8 @@ public class HomeActivity extends AppCompatActivity {
     {
         if(s.startsWith("http://")||s.startsWith("https://"))
         {
-            return true;
+            if(s.contains("www.ssn.net"))
+                return true;
         }
         return false;
     }
@@ -398,6 +399,7 @@ public class HomeActivity extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
+                downloadMRL.setEnabled(false);
                 //duplFlag=(cb.isChecked())?1:0;
                 //replFlag=(cb2.isChecked())?1:0;
                 dpath=vDpath.getText().toString();
