@@ -47,6 +47,7 @@ import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.android.flexbox.FlexboxLayout;
+import com.narayanacharya.waveview.WaveView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -82,6 +83,7 @@ public class HomeActivity extends AppCompatActivity {
     public static boolean isDownload=true;
     private CircleProgressBar progressBar;
     private boolean zipFlag=false;
+    public static TextView percentTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -400,6 +402,9 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 downloadMRL.setEnabled(false);
+                downloadMRL.setVisibility(View.INVISIBLE);
+                percentTV.setVisibility(View.VISIBLE);
+
                 //duplFlag=(cb.isChecked())?1:0;
                 //replFlag=(cb2.isChecked())?1:0;
                 dpath=vDpath.getText().toString();
@@ -421,7 +426,7 @@ public class HomeActivity extends AppCompatActivity {
                     System.out.println("Extensions "+exts);
                     BackgroundParseTask b = new BackgroundParseTask(HomeActivity.this);
                     b.execute(urlET.getText().toString().trim(), exts);
-                    System.out.println("status:" + urlET);
+                    //System.out.println("status:" + urlET);
                 }
             }
         });
@@ -475,6 +480,7 @@ public class HomeActivity extends AppCompatActivity {
     }*/
     public void init(){
         isStoragePermissionGranted();
+        percentTV = (TextView)findViewById(R.id.progressPercent);
         progressBar =  findViewById(R.id.progress_bar);
         backgroundIV = findViewById(R.id.backgroundIV);
         backgroundIV.setDrawingCacheEnabled(true);
@@ -510,6 +516,26 @@ public class HomeActivity extends AppCompatActivity {
 
     public void loadBackgroundImage(){
 
+        final WaveView w = (WaveView)findViewById(R.id.waveView);
+
+
+        final Animation zoomin= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin);
+        zoomin.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                backgroundIV.animate().alpha(1).setDuration(2000).start();
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                backgroundIV.animate().alpha(0).setDuration(2000).start();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         final Handler handler;
         handler = new Handler();
         HomeActivity.this.runOnUiThread(new Runnable() {
@@ -519,32 +545,19 @@ public class HomeActivity extends AppCompatActivity {
                         .load("https://source.unsplash.com/collection/1850974/"+screenHeight+"x"+screenWidth)
                         .skipMemoryCache()
                         .into(backgroundIV, new Callback() {
+
                             @Override
                             public void onSuccess() {
                                 if(backgroundIV.getDrawingCache()!=null){
+                                   // w.setWaveColor(getDominantColor(backgroundIV.getDrawingCache()));
                                     //Changing the color of send icon
                                    // sendIV.setColorFilter(getDominantColor(backgroundIV.getDrawingCache()));
                                 }
 
-                                Animation zoomin= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin);
-                                zoomin.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-                                        backgroundIV.animate().alpha(1).setDuration(2000).start();
-                                    }
 
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        backgroundIV.animate().alpha(0).setDuration(2000).start();
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-
-                                    }
-                                });
                                 backgroundIV.setAnimation(zoomin);
                                 backgroundIV.startAnimation(zoomin);
+                                //w.setWaveColor(getDominantColor());
 
                             }
 
@@ -660,11 +673,16 @@ public class HomeActivity extends AppCompatActivity {
     {
         onComplete=new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
-              i++;
-
-              progressBar.setProgressWithAnimation((i*100)/BackgroundParseTask.cnt);
+                if(BackgroundParseTask.cnt!=0)
+                    i++;
+                //System.out.println(BackgroundParseTask.cnt+" "+i);
+              int curPercent=(i*100)/BackgroundParseTask.cnt;
+              percentTV.setText(curPercent+" %");
+              progressBar.setProgressWithAnimation(curPercent);
                 if(BackgroundParseTask.cnt==i)
                 {
+                    percentTV.setVisibility(View.INVISIBLE);
+                    downloadMRL.setVisibility(View.VISIBLE);
                     downloadMRL.setEnabled(true);
                     System.out.println("Completed "+cnt+" "+cnt1);
                     Toast.makeText(cont,"Download Complete",Toast.LENGTH_SHORT).show();
@@ -744,6 +762,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         if(BackgroundParseTask.cnt!=0 && i!=BackgroundParseTask.cnt)
-        progressBar.setProgressWithAnimation((i*100)/BackgroundParseTask.cnt);
+        {progressBar.setProgressWithAnimation((i*100)/BackgroundParseTask.cnt);
+         percentTV.setText((i*100)/BackgroundParseTask.cnt);
+        }
     }
 }

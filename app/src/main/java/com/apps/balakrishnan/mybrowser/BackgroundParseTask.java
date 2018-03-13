@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -56,8 +57,13 @@ public class BackgroundParseTask extends AsyncTask<String, Void, String> {
 
                 if(cnt>0)
                     Toast.makeText(act.getApplicationContext(),"Downloading "+cnt+" files \n "+dcnt+" Duplicate files ignored",Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(act.getApplicationContext(),"No files to download",Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(act.getApplicationContext(), "No files to download", Toast.LENGTH_SHORT).show();
+                    HomeActivity.percentTV.setVisibility(View.INVISIBLE);
+                    HomeActivity.downloadMRL.setVisibility(View.VISIBLE);
+                    HomeActivity.downloadMRL.setEnabled(true);
+
+                }
             }
         });
     }
